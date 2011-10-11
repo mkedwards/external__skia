@@ -2,7 +2,7 @@ BASE_PATH := $(call my-dir)
 LOCAL_PATH:= $(call my-dir)
 
 #############################################################
-#   build the skia+fretype+png+jpeg+zlib+gif+webp library
+#   build the skia+fretype+png+jpeg+zlib+gif library
 #
 
 include $(CLEAR_VARS)
@@ -87,7 +87,6 @@ LOCAL_SRC_FILES:= \
 	src/images/SkImageDecoder_libgif.cpp \
 	src/images/SkImageDecoder_libjpeg.cpp \
 	src/images/SkImageDecoder_libpng.cpp \
-	src/images/SkImageDecoder_libwebp.cpp \
 	src/images/SkImageDecoder_libico.cpp \
 	src/images/SkImageDecoder_wbmp.cpp \
 	src/images/SkImageEncoder.cpp \
@@ -258,8 +257,6 @@ LOCAL_STATIC_LIBRARIES := \
 	libft2 \
 	libpng \
 	libgif \
-	libwebp-decode \
-	libwebp-encode
 
 LOCAL_C_INCLUDES += \
 	$(LOCAL_PATH)/src/core \
@@ -273,7 +270,6 @@ LOCAL_C_INCLUDES += \
 	external/libpng \
 	external/giflib \
 	external/jpeg \
-	external/webp/include \
 	frameworks/opt/emoji
 
 ifeq ($(NO_FALLBACK_FONT),true)
