@@ -22,6 +22,7 @@ LOCAL_SRC_FILES:= \
 LOCAL_SRC_FILES += \
         skia_test.cpp
 
+LOCAL_CFLAGS := -fno-strict-aliasing
 LOCAL_MODULE:= skia_test
 
 LOCAL_C_INCLUDES := \
