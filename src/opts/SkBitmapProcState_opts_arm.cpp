@@ -28,6 +28,14 @@
 
 
 #if __ARM_ARCH__ >= 6 && !defined(SK_CPU_BENDIAN)
+
+
+#if __NO_FRAMEPOINTER__
+// Two fns below don't compile due to use of r11 ($fp) in inline asm.
+// Stupid gcc.  Substituting r12 results in unsatisfiable constraint.
+// Disabling based on comments below.
+
+
 void SI8_D16_nofilter_DX_arm(const SkBitmapProcState& s,
                              const uint32_t* SK_RESTRICT xy,
                              int count, uint16_t* SK_RESTRICT colors) {
@@ -180,12 +188,17 @@ void SI8_opaque_D32_nofilter_DX_arm(const SkBitmapProcState& s,
                       "4:                                             \n\t"   // exit
                       : [xx] "+r" (xx), [count] "+r" (count), [colors] "+r" (colors)
                       : [table] "r" (table), [srcAddr] "r" (srcAddr)
-                      : "memory", "cc", "r4", "r5", "r6", "r7", "r8", "r9", "r10", "r11"
+                      : "memory", "cc", "r4", "r5", "r6", "r7", "r8", "r9", "r10"/*, "r11"*/
                       );
     }
 
     s.fBitmap->getColorTable()->unlockColors(false);
 }
+
+
+#endif // __NO_FRAMEPOINTER__
+
+
 #endif //__ARM_ARCH__ >= 6 && !defined(SK_CPU_BENDIAN)
 
 
@@ -400,11 +413,13 @@ void SkBitmapProcState::platformProcs() {
                 fSampleProc16 = SI8_D16_nofilter_DX_arm;
                 fShaderProc16 = NULL;
 #endif
+#if __NO_FRAMEPOINTER__
                 if (isOpaque) {
                     // this one is only very slighty faster than the C version
                     fSampleProc32 = SI8_opaque_D32_nofilter_DX_arm;
                     fShaderProc32 = NULL;
                 }
+#endif // __NO_FRAMEPOINTER__
             }
 #endif
             break;
